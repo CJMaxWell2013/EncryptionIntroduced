@@ -156,19 +156,17 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0
 
 时间戳是timestamp和设备标识deviceId，人家做统计嘛这两个参数肯定是需要的。
 
-publicParameter:99xxyy9xx9tt98xxx ---经过算法A处理--->resultSign:xxxxyyyy
+publicParameter:99xxyy9xx9tt98xxx + PrivateKey ---经过算法A处理---> resultSign:xxxxyyyy
 
 http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=99xxyy9xx9tt98xxx&resultSign=xxxxyyyy
 
-通过目前来看黑客B可以通过遍历直接userId来获取所有的用户信息，这点是畅通无阻的。
+通过目前来如果不验证时效性，黑客B可以通过遍历直接userId来获取所有的用户信息，这点是畅通无阻的。我们也假设这个PersonA验证了！！！
 
-那么PersonA说我验证了时间的时效性，时间间隔为30s，保证了不会被你频繁的获取。
+黑客B经过仔细研究和尝试即可发现一定的规律：
 
-黑客B经过仔细研究和尝试发现，改PersonA设计的时候这个加密参数是公共参数publicParameter
+1、签名具有时效性！并测出失效间隔！
 
-意味着所有的接口的验证都是一样的、可以互用，即
-
-B接口的publicParameter和resultSign发送的合法请求可以放到A接口中使用一段时间！！！
+2.“B接口的publicParameter和resultSign签名发送的合法请求在失效期内可以放到A接口中使用！“
 
 这下就简单了，为了通过接口A不间断的爬取这个库中的所有用户信息，
 
@@ -188,7 +186,13 @@ B接口的publicParameter和resultSign发送的合法请求可以放到A接口�
 
 通过重放签名来获取服务器的信任从而窃取用户库的私密信息。
 
-在这个案例中加密算法A根本没有起到任何作用。
+在这个案例中加密算法A和秘钥根本没有起到任何作用。
+
+因为PersonA设计的时候这个加密参数是公共参数publicParameter
+
+意味着同一时间所有的接口的验证都是一样的、可以互用！
+
+这个潜在的漏洞，黑客B在完全不用知道秘钥，同时也不需要知道加密算法A的算法过程！即可破之！
 
 ```
 
