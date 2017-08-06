@@ -99,7 +99,11 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 
 http://www.cnblogs.com/yangqi/archive/2010/07/16/1778675.html
 
-客户端传递timestamp=1503333333.6669(单位秒)
+客户端传递
+
+``` objc
+timestamp=1503333333.6669(单位秒)
+```
 服务端收到该时间戳的时候要获取自己机器上的unix时间戳
 ``` objc
 severTimestamp=1503333334.4567
@@ -116,9 +120,9 @@ maxOvertime = 10.0
 如果验证通过则放行，如果验证不通过则说明超过了时效。
 即使是2.1中签名过的合法的访问，超过了有效时间间隔也是不被允许的。
 
-通过前两个在http时代已经攻防基本上也就这样了。
+###成熟的算法参考
 
-##成熟的算法参考
+通过前两个在http时代已经攻防基本上也就这样了。
 
 
 ![snapshot](https://raw.githubusercontent.com/CJMaxWell2013/EncryptionIntroduced/master/Snapshots/mySign.png)
@@ -182,6 +186,7 @@ FROM       jobs
 **解决方案：对于这种方式的话我觉得后端那边对查询的条件做检查判断更为合适。**
 
 对于别的攻击，我也没有实验过不敢乱说，我也自己找了几篇博客看了看
+
 http://netsecurity.51cto.com/art/201405/440233.htm
 
 http://netsecurity.51cto.com/art/201408/448305_all.htm
