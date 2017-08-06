@@ -64,7 +64,7 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 
 则服务端通过生成的severSign和mySign的对比就可以发现不同，从而拒绝爬虫提取数据。
 
-**但是这个签名只是对了resumeId做了签名，并没有对detail签名，所以detail并未受到签名的保护**
+**但是这个签名只是对了resumeId字段做了签名，并没有将detailType字段纳入签名之中，所以detailType字段并未受到签名的保护**
 
 爬虫依然可以通过修改detail的值来爬取它已知简历下的简历各个模块的信息。
 
@@ -73,7 +73,7 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 综述：签名防止数据篡改，保证了访问的合法性，建议
 
 ``` objc
-将整个请求参数按照一定的排列顺序（ASCII）+ privateKey来签名
+将所有的请求参数按照一定的排列顺序（ASCII）+ privateKey来签名
 ```
 
 这样爬虫只要篡改了其中任何一段信息都会导致severSign和客户端传来的mySign不匹配，从而达到拒止作用。
