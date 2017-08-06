@@ -66,7 +66,7 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 
 **但是这个签名只是对了resumeId字段做了签名，并没有将detailType字段纳入签名之中，所以detailType字段并未受到签名的保护**
 
-爬虫依然可以通过修改detail的值来爬取它已知简历下的简历各个模块的信息。
+爬虫依然可以通过修改detailType的值来爬取它已知简历下的简历各个模块的信息。
 
 这也可以算是一个潜在的危险。
 
