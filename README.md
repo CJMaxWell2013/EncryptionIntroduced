@@ -118,10 +118,10 @@ maxOvertime = 10.0
 
 通过前两个在http时代已经攻防基本上也就这样了。
 
-###成熟的算法参考
+##成熟的算法参考
+
 
 ![snapshot](https://raw.githubusercontent.com/CJMaxWell2013/EncryptionIntroduced/master/Snapshots/mySign.png)
-
 
 
 主要过程如上图所示，关于友盟消息系统的加密过程详细参考文档
@@ -183,6 +183,7 @@ FROM       jobs
 
 对于别的攻击，我也没有实验过不敢乱说，我也自己找了几篇博客看了看
 http://netsecurity.51cto.com/art/201405/440233.htm
+
 http://netsecurity.51cto.com/art/201408/448305_all.htm
 
 大家有兴趣可以自己研究研究吧。
@@ -197,7 +198,11 @@ http阶段解决方案：对密码等信息进行加密传输,不能进行明文
 
 http://www.jianshu.com/p/6b241a35813f
 
-升级https解决方案：https出现就是在传输层对数据进行加密防止三方偷窥，一般都是采用权威机构授权根证书的形式来给web端和app使用，不过费用也比较昂贵。
+升级https解决方案：https出现就是在传输层对数据进行加密防止三方偷窥，一般都是采用权威机构授权根证书的形式来给web端和app使用，免费的也有。
+
+https://www.qcloud.com/product/ssl
+
+安全级别较高的，不过费用也比较昂贵。
 
 iOS 10以后受信任证书存储区中包含三类证书，详细可参考这边官方链接
 
