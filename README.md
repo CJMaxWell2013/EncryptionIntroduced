@@ -17,36 +17,36 @@ https://github.com/CJMaxWell2013/EncryptionIntroduced.git
 
 服务器域名：http://www.jescard.com
 
-端口号：resumeManager/getResumeInfo
+端口号：user/getUserInfo
 
-假设基础参数列表：resumeId、detailType，其中
+假设基础参数列表：userId、detailType，其中
 
-resumeId代表简历唯一标识
+userId代表用户唯一标识
 
-detailType代表简历页面的基本模块，0代表基本信息、1代表工作经历、2代表教育经历等等
+detailType代表用户页面的基本模块，0代表基本信息、1代表工作经历、2代表教育经历等等
 
 基本示例：
 
 ``` objc
-http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0
+http://www.jescard.com/user/getUserInfo?userId=1&detailType=0
 ```
 ## 2.1数据篡改攻防
 
 目前这种情况下有一个显著的安全隐患就是我们可以修改
 
 ``` objc
-resumeId=2、3、4......
+userId=2、3、4......
 ```
 
-来遍历得到其余的所有简历信息，主要原因由于我们resumeId是真实的数据库的主键，主键一般都是正整数类型的数字，所以爬虫可以通过修改这个参数的值来进行爬取。
+来遍历得到其余的所有用户信息，主要原因由于我们userId是真实的数据库的用户表的主键，主键一般都是正整数类型的数字，所以爬虫可以通过修改这个参数的值来进行爬取。
 
 **解决办法1：避免主键来作为参数传递，这种方式多用于三方授权，三方授权通常都不会给用户直接
 的数据库中的主键，而是通过一种不可逆的算法来生成一个token来给客户端使用，防止通过这种直接遍历主键id获取别的用户的信息。**
 
-**解决办法2：采用签名的方法，前后端约定一个秘钥，假设privateKey=“123456”，用这个privateKey来给resumeId做签名(mySign)**
+**解决办法2：采用签名的方法，前后端约定一个秘钥，假设privateKey=“123456”，用这个privateKey来给userId做签名(mySign)**
 ,
 假设使用目前计算机主流使用的md5，则过程如下
-前端通过resumeId+privateKey生成签名字符串mySign
+前端通过userId+privateKey生成签名字符串mySign
 ``` objc
 1 + 123456 ——经过md5——>  ASDFHGGGASDFHGGGASDFHGGGASDFHGGG
 ```
@@ -54,9 +54,9 @@ resumeId=2、3、4......
 客户端发送请求为
 
 ``` objc
-http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGASDFHGGGASDFHGGGASDFHGGG
+http://www.jescard.com/user/getUserInfo?userId=1&detailType=0&mySign=ASDFHGGGASDFHGGGASDFHGGGASDFHGGG
 ```
-服务端在接受resumeId参数以后，以后也按照约定resumeId+privateKey来生成签名severSign，如果爬虫resumeId被修改了为了2，那么由于md5加密的唯一性
+服务端在接受userId参数以后，以后也按照约定userId+privateKey来生成签名severSign，如果爬虫userId被修改了为了2，那么由于md5加密的唯一性
 
 ``` objc
 2 + 123456 ——经过md5——>  EFGFHGGGASDFHGKKKKKGGGASDFHGGGKKK
@@ -64,9 +64,9 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 
 则服务端通过生成的severSign和mySign的对比就可以发现不同，从而拒绝爬虫提取数据。
 
-**但是这个签名只是对了resumeId字段做了签名，并没有将detailType字段纳入签名之中，所以detailType字段并未受到签名的保护**
+**但是这个签名只是对了userId字段做了签名，并没有将detailType字段纳入签名之中，所以detailType字段并未受到签名的保护**
 
-爬虫依然可以通过修改detailType的值来爬取它已知简历下的简历各个模块的信息。
+爬虫依然可以通过修改detailType的值来爬取它已知用户下的用户各个模块的信息。
 
 这也可以算是一个潜在的危险。
 
@@ -83,11 +83,11 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 现在数据篡改解决了，但是爬虫着急了
 
 ``` objc
-http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGASDFHGGGASDFHGGGASDFHGGG
+http://www.jescard.com/user/getUserInfo?userId=1&detailType=0&mySign=ASDFHGGGASDFHGGGASDFHGGGASDFHGGG
 ```
-简历标识为resumeId=2、3、4…..不能被直接网络请求提取了。
+用户标识为userId=2、3、4…..不能被直接网络请求提取了。
 
-但是，如果仔细观察就会发现，我每次都可拿这个签名验证过的url，可以重复的不断的调用获取该指定简历的信息即resumeId=1的那个简历。
+但是，如果仔细观察就会发现，我每次都可拿这个签名验证过的url，可以重复的不断的调用获取该指定用户的信息即userId=1的那个用户。
 
 **邪恶的爬虫者就可能会无限制、高频率的发起这个请求来让你服务器不断的响应该请求，从而达到拖累你服务器来搞破坏。**
 
@@ -127,6 +127,67 @@ maxOvertime = 10.0
 ``` objc
 md5(md5(将所有的请求参数按照一定的排列顺序（ASCII）+ privateKey来签名） + 时间戳)
 ```
+
+### 一些自定义的算法加密过程误区
+
+有些时候我们根据业务需求会设计一些自定义的算法，有时候我们会说，我只要不暴露我的算法过程，我这个加密就是不可破解的。
+
+因为只要我不告诉你加密过程，你是无法钻到我的脑子里面去猜到我的加密过程的，那么对加密结果也是不可测的。
+
+这是一个典型的误区，之所以进行加密，是因为我们假设服务端建立在不信任客户端的前提下的，
+
+而所有的加密结果都需要经过服务端校验获取信任的。
+
+意味着只要服务端信任了客户端，我们的加密就失效了。这句话很晦涩哈，举个例子吧！
+
+``` objc
+
+假设有某PersonA就职于统计SDK设计方，创建了一个算法A用于加密！
+
+模拟攻击方--黑客B，其完全不知道PersonA的算法，对于PersonA的加密结果也是不可测的！
+
+黑客B的目标是从A接口中获取所有的用户信息！A接口如下：
+
+http://www.umeng.com/user/getUserInfo?userId=1&detailType=0
+
+但是PersonA在操作过程中只对整个公司业务底层的http请求的公共参数publicParameter进行了加密，
+
+对于统计SDK设计方，比如友盟统计，每个统计接口中必传递的参数是时间戳是timestamp和设备标识deviceId，人家做统计嘛这两个参数肯定是需要的。
+
+publicParameter:20180808xxx ---经过算法A处理--->resultSign:xxxxyyyy
+
+http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=20180808xxx&resultSign=xxxxyyyy
+
+通过目前来看黑客B可以通过遍历直接userId来获取所有的用户信息，这点是畅通无阻的。
+
+那么PersonA说我验证了时间的时效性，时间间隔为30s，保证了不会被你频繁的获取。
+
+黑客B经过仔细研究和尝试发现，改PersonA设计的时候这个加密参数是公共参数publicParameter意味着所有的接口的验证都是一样的、可以互用，即
+
+B接口的publicParameter和resultSign发送的合法请求可以放到A接口中使用一段时间！！！
+
+这下就简单了，为了爬取这个库中的所有用户信息，
+
+黑客B就模拟多个客户端调用B接口甚至是C接口中的合法网络请求，在小于PersonA设置的时效间隔范围内，
+
+将publicParameter和resultSign筛选出输送给A接口就行了，这样就骗过了服务器的签名校验，获得了服务器的信任。
+
+这样黑客B就能不必中断爬虫过程，源源不断的来采集用户库中的私密信息。
+
+这个就是一个典型的只对公共参数做校验而被黑客B利用的重放攻击案例。
+
+这个过程本质上是攻击者利用网络监听或者其他方式盗取认证凭据，之后再把它重新发给认证服务器。
+
+（https://baike.baidu.com/item/重放攻击/2229240?fr=aladdin#reference-[3]-1569933-wrap）
+
+通过重放签名来获取服务器的信任从而窃取用户库的私密信息。
+
+在这个案例中加密算法A根本没有起到任何作用。
+
+切记不要仅对公共参数进行加密！！！这是十分不科学的！！！
+
+```
+
 
 ### 成熟的算法参考(UM消息推送示例)
 
