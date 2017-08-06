@@ -189,7 +189,7 @@ SELECT    job_id, job_describle, job_name, job_salary
 FROM       jobs
 ```
 
-这样我们一下子就提取了jobs中的所有信息。
+这样我们一下子就提取了jobs表中的所有信息。
 
 **解决方案：对于这种方式的话我觉得后端那边对查询的条件做检查判断更为合适。**
 
