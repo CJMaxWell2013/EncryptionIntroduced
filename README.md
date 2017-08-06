@@ -152,7 +152,9 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0
 
 但是PersonA在操作过程中只对整个公司业务底层的http请求的公共参数publicParameter进行了加密，
 
-对于统计SDK设计方，比如友盟统计，每个统计接口中必传递的参数是时间戳是timestamp和设备标识deviceId，人家做统计嘛这两个参数肯定是需要的。
+对于统计SDK设计方，比如友盟统计，每个统计接口中必传递的参数是
+
+时间戳是timestamp和设备标识deviceId，人家做统计嘛这两个参数肯定是需要的。
 
 publicParameter:20180808xxx ---经过算法A处理--->resultSign:xxxxyyyy
 
@@ -162,17 +164,21 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=2018
 
 那么PersonA说我验证了时间的时效性，时间间隔为30s，保证了不会被你频繁的获取。
 
-黑客B经过仔细研究和尝试发现，改PersonA设计的时候这个加密参数是公共参数publicParameter意味着所有的接口的验证都是一样的、可以互用，即
+黑客B经过仔细研究和尝试发现，改PersonA设计的时候这个加密参数是公共参数publicParameter
+
+意味着所有的接口的验证都是一样的、可以互用，即
 
 B接口的publicParameter和resultSign发送的合法请求可以放到A接口中使用一段时间！！！
 
-这下就简单了，为了爬取这个库中的所有用户信息，
+这下就简单了，为了通过接口A不间断的爬取这个库中的所有用户信息，
 
-黑客B就模拟多个客户端调用B接口甚至是C接口中的合法网络请求，在小于PersonA设置的时效间隔范围内，
+黑客B就模拟多个慢频率的客户端调用B接口甚至是C接口中的合法网络请求，在小于PersonA设置的时效间隔范围内，
 
-将publicParameter和resultSign筛选出输送给A接口就行了，这样就骗过了服务器的签名校验，获得了服务器的信任。
+将参数中的publicParameter和resultSign筛选出建立一个缓冲签名池，
 
-这样黑客B就能不必中断爬虫过程，源源不断的来采集用户库中的私密信息。
+从池中筛选出新的有效签名输送给A接口，获得了服务器的信任。
+
+这样黑客B就能不必中断A接口的爬取过程，源源不断的来采集用户库中的私密信息。
 
 这个就是一个典型的只对公共参数做校验而被黑客B利用的重放攻击案例。
 
