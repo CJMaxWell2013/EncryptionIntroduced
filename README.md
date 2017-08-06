@@ -156,9 +156,9 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0
 
 时间戳是timestamp和设备标识deviceId，人家做统计嘛这两个参数肯定是需要的。
 
-publicParameter:20180808xxx ---经过算法A处理--->resultSign:xxxxyyyy
+publicParameter:99xxyy9xx9tt98xxx ---经过算法A处理--->resultSign:xxxxyyyy
 
-http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=20180808xxx&resultSign=xxxxyyyy
+http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=99xxyy9xx9tt98xxx&resultSign=xxxxyyyy
 
 通过目前来看黑客B可以通过遍历直接userId来获取所有的用户信息，这点是畅通无阻的。
 
@@ -189,8 +189,6 @@ B接口的publicParameter和resultSign发送的合法请求可以放到A接口�
 通过重放签名来获取服务器的信任从而窃取用户库的私密信息。
 
 在这个案例中加密算法A根本没有起到任何作用。
-
-切记不要仅对公共参数进行加密！！！这是十分不科学的！！！
 
 ```
 
