@@ -1,20 +1,30 @@
-# 关于网络安全问题的若干看法
+# 关于数据安全问题的若干看法
+
+https://github.com/CJMaxWell2013/EncryptionIntroduced.git
 
 # 一、关于web或者app应用目前大致主要面临的安全问题
 
 1、数据篡改（签名）
+
 2、重放攻击 （时间戳）
+
 3、非法参数提交 （校验参数）
+
 4、数据偷窥（https）
 
 
 # 二、原理分析和解决方案
 
 服务器域名：http://www.jescard.com
+
 端口号：resumeManager/getResumeInfo
+
 基础参数列表：resumeId、detailType，其中
+
 userid表示用户的唯一标识
+
 resumeId代表简历唯一标识
+
 detailType代表简历页面的基本模块，0代表基本信息、1代表工作经历、2代表教育经历等等
 
 基本示例：
