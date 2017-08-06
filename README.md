@@ -130,7 +130,7 @@ md5(md5(将所有的请求参数按照一定的排列顺序（ASCII）+ privateK
 
 ### 成熟的算法参考(UM消息推送示例)
 
-通过前两个在http时代已经攻防基本上也就这样了。
+我认为通过前两个部分，在http时代攻防基本上也就这样了。
 
 
 ![snapshot](https://raw.githubusercontent.com/CJMaxWell2013/EncryptionIntroduced/master/Snapshots/mySign.png)
