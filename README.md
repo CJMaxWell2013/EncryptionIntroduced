@@ -97,7 +97,7 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 
 **解决办法2：添加时间戳timestamp字段，UNIX时间戳用的是世界协调时定义的是时间间隔，注意是时间间隔，避免了时区的问题！排除早期的32位存储争议，现在的多为double类型的64位存储。详见**
 
-http://www.cnblogs.com/yangqi/archive/2010/07/16/1778675.html
+https://en.wikipedia.org/wiki/Unix_time
 
 客户端传递
 
