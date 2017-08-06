@@ -44,6 +44,7 @@ resumeId=2、3、4......
 的数据库中的主键，而是通过一种不可逆的算法来生成一个token来给客户端使用，防止通过这种直接遍历主键id获取别的用户的信息。**
 
 **解决办法2：采用签名的方法，前后端约定一个秘钥，假设privateKey=“123456”，用这个privateKey来给resumeId做签名(mySign)**
+,
 假设使用目前计算机主流使用的md5，则过程如下
 前端通过resumeId+privateKey生成签名字符串mySign
 ``` objc
@@ -63,7 +64,7 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 
 则服务端通过生成的severSign和mySign的对比就可以发现不同，从而拒绝爬虫提取数据。
 
-但是这个签名只是对了resumeId做了签名，并没有对detail签名，所以detail并未受到签名的保护
+**但是这个签名只是对了resumeId做了签名，并没有对detail签名，所以detail并未受到签名的保护**
 
 爬虫依然可以通过修改detail的值来爬取它已知简历下的简历各个模块的信息。
 
@@ -87,11 +88,14 @@ http://www.jescard.com/user/getUserInfo?resumeId=1&detailType=0&mySign=ASDFHGGGA
 简历标识为resumeId=2、3、4…..不能被直接网络请求提取了。
 
 但是，如果仔细观察就会发现，我每次都可拿这个签名验证过的url，可以重复的不断的调用获取该指定简历的信息即resumeId=1的那个简历。
-**邪恶的爬虫者就可能会无限制、高频率的发起这个请求来让你服务器不断的响应该请求，从而达到拖累你服务器来搞破坏。**这个就是一个重放攻击的过程。
+
+**邪恶的爬虫者就可能会无限制、高频率的发起这个请求来让你服务器不断的响应该请求，从而达到拖累你服务器来搞破坏。**
+
+这个就是一个重放攻击的过程。
 
 **解决办法1：ip或者deviceId（客户端的设备id）来限制访问频率，这个比较常见，在反爬虫中常见的手段，但是这种手段也是可以被破解的比如我使用多个代理ip缓存池就可以绕过你的ip防火墙达到目的。**
 
-**解决办法2：添加时间戳timestamp字段，UNIX时间戳用的是世界协调时定义的是时间间隔，注意是时间间隔，避免了时区的问题！排除早期的32位存储争议，现在的多为double类型的64位存储。**详见
+**解决办法2：添加时间戳timestamp字段，UNIX时间戳用的是世界协调时定义的是时间间隔，注意是时间间隔，避免了时区的问题！排除早期的32位存储争议，现在的多为double类型的64位存储。详见**
 
 http://www.cnblogs.com/yangqi/archive/2010/07/16/1778675.html
 
@@ -114,7 +118,7 @@ maxOvertime = 10.0
 
 通过前两个在http时代已经攻防基本上也就这样了。
 
-成熟的算法参考
+###成熟的算法参考
 
 ![snapshot](https://raw.githubusercontent.com/CJMaxWell2013/EncryptionIntroduced/master/Snapshots/mySign.png)
 
@@ -128,7 +132,9 @@ http://dev.umeng.com/push/ios/api-doc#4_10
 
 
 ## 2.3非法提交参数
+
 这个服务端开发的打交道比较多，比如SQL注入，XSS攻击很多…
+
 我本人对SQL注入略有了解，简单来说，咱们在web表单中提交的参数最终转化成sql语句，而条件过滤基本是借助where后面的条件来实现的，
 正常情况下如果where后面的条件为真就可以提取到对应的信息。
 
@@ -173,7 +179,7 @@ FROM       jobs
 
 这样我们一下子就提取了jobs中的所有信息。
 
-解决方案：对于这种方式的话我觉得后端那边对查询的条件做检查判断更为合适。
+**解决方案：对于这种方式的话我觉得后端那边对查询的条件做检查判断更为合适。**
 
 对于别的攻击，我也没有实验过不敢乱说，我也自己找了几篇博客看了看
 http://netsecurity.51cto.com/art/201405/440233.htm
