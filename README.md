@@ -15,15 +15,15 @@ https://github.com/CJMaxWell2013/EncryptionIntroduced.git
 
 # 二、原理分析和解决方案
 
-服务器域名：http://www.jescard.com
+服务器域名：`http://www.jescard.com`
 
-端口号：user/getUserInfo
+端口号：`user/getUserInfo`
 
-假设基础参数列表：userId、detailType，其中
+假设基础参数列表：`userId`、`detailType`，其中
 
-userId代表用户唯一标识
+`userId`代表用户唯一标识
 
-detailType代表用户页面的基本模块，0代表基本信息、1代表工作经历、2代表教育经历等等
+`detailType`代表用户页面的基本模块，0代表基本信息、1代表工作经历、2代表教育经历等等
 
 基本示例：
 
@@ -128,7 +128,7 @@ maxOvertime = 10.0
 md5(md5(将所有的请求参数按照一定的排列顺序（ASCII）+ privateKey来签名） + 时间戳)
 ```
 
-### 一些自定义的算法加密过程误区
+* 一些自定义的算法加密过程误区
 
 有些时候我们根据业务需求会设计一些自定义的算法，有时候我们会说，我只要不暴露我的算法过程，我这个加密就是不可破解的。
 
@@ -197,7 +197,7 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=99xx
 ```
 
 
-### 成熟的算法参考(UM消息推送示例)
+* 成熟的算法参考(UM消息推送示例)
 
 我认为通过2.1和2.2两个部分得到的前后端协调防御的办法，基本上可以满足大部分场合的需求了。
 
