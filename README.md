@@ -154,7 +154,7 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0
 
 对于统计SDK设计方，比如友盟统计，每个统计接口中必传递的参数是
 
-时间戳是timestamp和设备标识deviceId，人家做统计嘛这两个参数肯定是需要的。
+时间戳是timestamp，人家做统计嘛这个参数肯定是需要的。
 
 publicParameter:99xxyy9xx9tt98xxx + PrivateKey ---经过算法A处理---> resultSign:xxxxyyyy
 
@@ -193,6 +193,10 @@ http://www.umeng.com/user/getUserInfo?userId=1&detailType=0&publicParameter=99xx
 意味着同一时间所有的接口的验证都是一样的、可以互用！
 
 这个潜在的漏洞，黑客B在完全不用知道秘钥，同时也不需要知道加密算法A的算法过程！即可破之！
+
+这正也充分说明了未被签名的字段如2.1所说，其一般情况下是未受保护，且可被篡改的。
+
+所以，PersonA仅对时间戳签名是无法保证userId等其余参数不被篡改的。
 
 ```
 
